@@ -34,4 +34,4 @@ Steps to create Djnago Restful Api:
 6- Create a new file serializer.py to convert data to JSON objects
 
 
-7- 
+<!--7-Create a url for the API that-->
