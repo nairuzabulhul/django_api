@@ -5,9 +5,6 @@ from .models import Book
 
 class BookSerializer(serializers.ModelSerializer):
     
-    #  owner = serializers.Field(source='owner.username')
-    #  owner = serializers.PrimaryKeyRelatedField(many=True)
-    #  owner = serializers.PrimaryKeyRelatedField(many=True, queryset=Book.objects.all())
      owner = serializers.ReadOnlyField(source='owner.username')
 
      class Meta:
