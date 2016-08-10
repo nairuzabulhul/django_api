@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'django_api'
 ]
 
@@ -103,6 +104,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+
+#REST FRAMEWORK
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/

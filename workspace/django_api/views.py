@@ -8,13 +8,21 @@ from rest_framework.response import Response
 # from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from rest_framework import status
+from rest_framework import permissions
 
 from serializers import BookSerializer
 from .models import Book
 
 
+
 # Create your views here.
 class BookList(APIView):
+    
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    
+    def pre_save(self, obj):
+        obj.owner = self.request.username
+    
     
     #GET 
     def get(self,request):
@@ -24,21 +32,24 @@ class BookList(APIView):
         return Response (serializers.data) # return data in a form of JSON
         
     
-    #POST
+    # #POST
     def post(self,request, format=None):
         
         serializers = BookSerializer(data=request.data)
         if serializers.is_valid():
-            serializers.save()
+            serializers.save(owner=self.request.user)
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
         
         
     
 
-# Detailed BookDetail
+#Detailed BookDetail
 class BookDetail(APIView):
     
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    def pre_save(self, obj):
+        obj.owner = self.request.user
     
     def get_object(self,pk):
     
@@ -62,7 +73,8 @@ class BookDetail(APIView):
         books = self.get_object(pk) # get the primary key of the entry from the database
         serializers = BookSerializer(books, data=request.data)
         if serializers.is_valid():
-            serializers.save()
+            # serializers.save()
+            serializers.save(owner=self.request.user)
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
         
